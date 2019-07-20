@@ -1,5 +1,5 @@
 class TasksController < ApplicationController
-    
+ 
   #タスク一覧取得画面
   def index
     @tasks = Task.all
@@ -33,7 +33,7 @@ class TasksController < ApplicationController
     @task = Task.find(params[:id])
   end
 
-　#タスク編集
+  #タスク編集
   def update
     @task = Task.find(params[:id])
 
@@ -46,7 +46,7 @@ class TasksController < ApplicationController
     end
   end
   
-　#タスク削除
+  #タスク削除
   def destroy
     @task = Task.find(params[:id])
     @task.destroy
