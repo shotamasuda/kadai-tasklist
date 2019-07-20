@@ -1,4 +1,5 @@
 class TasksController < ApplicationController
+ before_action :set_task, only: [:show, :edit, :update, :destroy]
  
   #タスク一覧取得画面
   def index
@@ -7,7 +8,6 @@ class TasksController < ApplicationController
 
   #タスク詳細取得画面
   def show
-    @task = Task.find(params[:id])
   end
 
   #タスク作成画面
@@ -30,12 +30,10 @@ class TasksController < ApplicationController
 
   #タスク編集画面
   def edit
-    @task = Task.find(params[:id])
   end
 
   #タスク編集
   def update
-    @task = Task.find(params[:id])
 
     if @task.update(task_params)
       flash[:success] = 'タスク は正常に更新されました'
@@ -48,7 +46,6 @@ class TasksController < ApplicationController
   
   #タスク削除
   def destroy
-    @task = Task.find(params[:id])
     @task.destroy
 
     flash[:success] = 'タスク は正常に削除されました'
@@ -57,8 +54,11 @@ class TasksController < ApplicationController
   
   private
 
+  def set_task
+    @task = Task.find(params[:id])
+  end
   # Strong Parameter
   def task_params
-    params.require(:task).permit(:content)
+    params.require(:task).permit(:content, :status)
   end
 end
