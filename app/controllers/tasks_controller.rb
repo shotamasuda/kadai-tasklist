@@ -1,9 +1,12 @@
 class TasksController < ApplicationController
+ before_action :require_user_logged_in
  before_action :set_task, only: [:show, :edit, :update, :destroy]
  
   #タスク一覧取得画面
   def index
-    @tasks = Task.all
+    if logged_in?
+      @tasks = current_user.tasks.all
+    end
   end
 
   #タスク詳細取得画面
@@ -12,12 +15,12 @@ class TasksController < ApplicationController
 
   #タスク作成画面
   def new
-     @task = Task.new
+     @task = current_user.tasks.new
   end
 
   #タスク作成
   def create
-    @task = Task.new(task_params)
+    @task = current_user.tasks.new(task_params)
 
     if @task.save
       flash[:success] = 'タスク が正常に作成されました'
@@ -55,10 +58,17 @@ class TasksController < ApplicationController
   private
 
   def set_task
-    @task = Task.find(params[:id])
+    @task = current_user.tasks.find(params[:id])
   end
   # Strong Parameter
   def task_params
     params.require(:task).permit(:content, :status)
+  end
+  
+  def correct_user
+    @task = current_user.tasks.find_by(id: params[:id])
+    unless @task
+      redirect_to root_url
+    end
   end
 end
